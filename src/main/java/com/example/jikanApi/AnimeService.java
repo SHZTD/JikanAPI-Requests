@@ -18,7 +18,14 @@ public class AnimeService {
     public List<Map<String, Object>> searchAnime(String query) {
         String url = JIKAN_API_URL + query;
         Map<String, Object> response = restTemplate.getForObject(url, Map.class);
+
         List<Map<String, Object>> animeData = (List<Map<String, Object>>) response.get("data");
+        for (Map<String, Object> anime : animeData) {
+            Map<String, Object> images = (Map<String, Object>) anime.get("images");
+            Map<String, Object> jpg = (Map<String, Object>) images.get("jpg");
+            anime.put("image_url", jpg.get("image_url"));  // Add image_url field manually
+        }
+
         return animeData;
     }
 }
